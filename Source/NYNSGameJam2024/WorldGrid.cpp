@@ -12,14 +12,7 @@ void AWorldGrid::SpawnTileGrid()
 	auto World = GetWorld();
 	if(World)
 	{
-		// Select some random positions within the grid to spawn villages
-		TArray<UE::Geometry::FVector2i> VillagePositions;
-		for (int i = 0; i < VillageCount; ++i)
-		{
-			int x = FMath::RandRange(0, GridSizeX - 1);
-			int y = FMath::RandRange(0, GridSizeY - 1);
-			VillagePositions.Add(UE::Geometry::FVector2i(x, y));
-		}
+		auto VillagePositions = GetRandomVillagePositions();
 		for (int y = 0; y < GridSizeY; ++y)
 		{
 			for (int x = 0; x < GridSizeX; ++x)
@@ -34,6 +27,7 @@ void AWorldGrid::SpawnTileGrid()
 						SpawnedVillage->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 					}
 					auto Distance = Position.DistanceSquared(UE::Geometry::FVector2i(x, y));
+					Logger::Log("Distance: " + FString::SanitizeFloat(Distance));
 					// Random bool, the less the value of distance, the more likely it is to be true, causes clumped up islands
 					bool bIsIslandTile = FMath::RandRange(0, Distance - 1) == 0;
 					if(bIsIslandTile)
@@ -44,10 +38,55 @@ void AWorldGrid::SpawnTileGrid()
 				}
 			}
 		}
-		//FVector MapCenter = FVector(GridSizeX * TileSize / 2, GridSizeY * TileSize / 2, 0);
-		//World->GetFirstPlayerController()->GetPawn()->SetActorRelativeLocation(MapCenter);//SetActorLocation(MapCenter);
+		// Center grid
+		SetActorLocation(FVector(0, -GridSizeY * TileSize, 0));
 	}
 }
+
+TArray<UE::Geometry::FVector2i> AWorldGrid::GetRandomVillagePositions()
+{
+	auto GridFirstPosition = FVector(0, 0, 0);
+	auto GridLastPosition = FVector(GridSizeX, GridSizeY, 0);
+	// distance squared
+	auto MaxDistance = FVector::DistSquared(GridFirstPosition, GridLastPosition);
+		
+	Logger::Log("Max distance: " + FString::SanitizeFloat(MaxDistance));
+	
+	TArray<UE::Geometry::FVector2i> VillagePositions;
+	for (int i = 0; i < VillageCount; ++i)
+	{
+		auto AcceptableVillageDistance = MaxDistance / (VillageCount * 2);
+		auto attempts = 0;
+		while(true)
+		{
+			int x = FMath::RandRange(0, GridSizeX - 1);
+			int y = FMath::RandRange(0, GridSizeY - 1);
+			UE::Geometry::FVector2i Position(x, y);
+			bool bIsAcceptableDistance = true;
+			for (auto VillagePosition : VillagePositions)
+			{
+				auto Distance = Position.DistanceSquared(VillagePosition);
+				if(Distance < AcceptableVillageDistance)
+				{
+					bIsAcceptableDistance = false;
+					attempts++;
+					if(attempts > 100)
+					{
+						AcceptableVillageDistance--;
+					}
+					break;
+				}
+			}
+			if(bIsAcceptableDistance)
+			{
+				VillagePositions.Add(Position);
+				break;
+			}
+		}
+	}
+	return VillagePositions;
+}
+
 // Called when the game starts or when spawned
 void AWorldGrid::BeginPlay()
 {

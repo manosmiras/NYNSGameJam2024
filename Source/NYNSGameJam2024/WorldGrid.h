@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IntVectorTypes.h"
 #include "GameFramework/Actor.h"
 #include "WorldGrid.generated.h"
 
@@ -26,6 +27,7 @@ public:
 	TSubclassOf<AActor> VillageActor;
 	UFUNCTION(BlueprintCallable)
 	void SpawnTileGrid();
+	TArray<UE::Geometry::FVector2i> GetRandomVillagePositions();
 
 protected:
 	// Called when the game starts or when spawned
