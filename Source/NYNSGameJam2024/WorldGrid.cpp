@@ -23,8 +23,11 @@ void AWorldGrid::SpawnTileGrid()
 					{
 						// Spawn village actor
 						FVector Location = FVector(x * TileSize, y * TileSize, 0);
-						AActor* SpawnedVillage = World->SpawnActor(VillageActor, &Location);
-						SpawnedVillage->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+						if(VillageActor)
+						{
+							AActor* SpawnedVillage = World->SpawnActor(VillageActor, &Location);
+							SpawnedVillage->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+						}
 					}
 					auto Distance = Position.DistanceSquared(UE::Geometry::FVector2i(x, y));
 					Logger::Log("Distance: " + FString::SanitizeFloat(Distance));
