@@ -4,7 +4,6 @@
 #include "WorldGrid.h"
 
 #include "IntVectorTypes.h"
-#include "Logger.h"
 #include "Engine/StaticMeshActor.h"
 
 void AWorldGrid::SpawnTileGrid()
@@ -30,7 +29,6 @@ void AWorldGrid::SpawnTileGrid()
 						}
 					}
 					auto Distance = Position.DistanceSquared(UE::Geometry::FVector2i(x, y));
-					Logger::Log("Distance: " + FString::SanitizeFloat(Distance));
 					// Random bool, the less the value of distance, the more likely it is to be true, causes clumped up islands
 					bool bIsIslandTile = FMath::RandRange(0, Distance - 1) == 0;
 					if(bIsIslandTile)
@@ -52,8 +50,6 @@ TArray<UE::Geometry::FVector2i> AWorldGrid::GetRandomVillagePositions()
 	auto GridLastPosition = FVector(GridSizeX, GridSizeY, 0);
 	// distance squared
 	auto MaxDistance = FVector::DistSquared(GridFirstPosition, GridLastPosition);
-		
-	Logger::Log("Max distance: " + FString::SanitizeFloat(MaxDistance));
 	
 	TArray<UE::Geometry::FVector2i> VillagePositions;
 	for (int i = 0; i < VillageCount; ++i)
