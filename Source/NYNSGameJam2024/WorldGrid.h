@@ -17,7 +17,7 @@ public:
 	int GridSizeX;
 	UPROPERTY(EditInstanceOnly)
 	int GridSizeY;
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int TileSize;
 	UPROPERTY(EditInstanceOnly)
 	int VillageCount;
