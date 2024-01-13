@@ -34,7 +34,7 @@ void AWorldGrid::SpawnTileGrid()
 					if(bIsIslandTile)
 					{
 						FVector Location = FVector(x * TileSize, y * TileSize, 0);
-						SpawnMesh(World, TileMesh, Location);
+						SpawnMesh(World, TileMesh, Location, TileScale);
 					}
 				}
 			}
@@ -92,14 +92,16 @@ void AWorldGrid::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AWorldGrid::SpawnMesh(UWorld* World, UStaticMesh* Mesh, FVector Location)
+void AWorldGrid::SpawnMesh(UWorld* World, UStaticMesh* Mesh, FVector Location, FVector Scale)
 {
 	FRotator Rotation = FRotator(0, 0, 0);
 	FActorSpawnParameters SpawnInfo;
+	// create transform using location, rotation, and scale
+	FTransform Transform = FTransform(Rotation, Location, Scale);
+	
 	AStaticMeshActor* SpawnedStaticMeshActor = World->SpawnActor<AStaticMeshActor>(
 		AStaticMeshActor::StaticClass(),
-		Location,
-		Rotation,
+		Transform,
 		SpawnInfo
 	);
 	if(SpawnedStaticMeshActor)

@@ -24,6 +24,8 @@ public:
 	UPROPERTY(EditInstanceOnly)
 	UStaticMesh* TileMesh;
 	UPROPERTY(EditInstanceOnly)
+	FVector TileScale;
+	UPROPERTY(EditInstanceOnly)
 	TSubclassOf<AActor> VillageActor;
 	UFUNCTION(BlueprintCallable)
 	void SpawnTileGrid();
@@ -33,5 +35,5 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
-	void SpawnMesh(UWorld* World, UStaticMesh* Mesh, FVector Location);
+	void SpawnMesh(UWorld* World, UStaticMesh* Mesh, FVector Location, FVector Scale);
 };
