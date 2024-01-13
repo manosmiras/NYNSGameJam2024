@@ -23,7 +23,7 @@ public:
 	int VillageCount;
 	UPROPERTY(EditInstanceOnly)
 	UStaticMesh* TileMesh;
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector TileScale;
 	UPROPERTY(EditInstanceOnly)
 	TSubclassOf<AActor> VillageActor;
