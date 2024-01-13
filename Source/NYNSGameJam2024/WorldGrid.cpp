@@ -30,7 +30,7 @@ void AWorldGrid::SpawnTileGrid()
 					}
 					auto Distance = Position.DistanceSquared(UE::Geometry::FVector2i(x, y));
 					// Random bool, the less the value of distance, the more likely it is to be true, causes clumped up islands
-					bool bIsIslandTile = FMath::RandRange(0, Distance - 1) == 0;
+					bool bIsIslandTile = FMath::RandRange(0, Distance - 2) == 0;
 					if(bIsIslandTile)
 					{
 						FVector Location = FVector(x * TileSize, y * TileSize, 0);
